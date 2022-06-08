@@ -6,6 +6,7 @@ using namespace std;
 
 class Edge {
 public:
+  //constructor
   Edge(std::string edgeDest, int edgeWeight) {
     dest = edgeDest;
     weight = edgeWeight;
@@ -20,6 +21,7 @@ private:
 
 class Vertex {
 public:
+  //contructor
   Vertex(std::string newLabel) {
     label = newLabel;
   }
@@ -160,11 +162,12 @@ void Graph::print() {
 }
 
 int main() {
-  string usrIn;
-  int w;
-  string strTwo;
-  Graph g;
-  
+  string usrIn; //1st string var
+  int w; //int var
+  string strTwo; //2nd string var
+  Graph g; //main graph
+
+  //user input logic
   cout << "Commands (Case Sensitive):" << endl;
   cout << "av (Add Vertex): Enter a label for a vertex. Add it to the graph." << endl;
   cout << "rv (Remove Vertex): Enter a vertex label and remove it from the graph. Remove all edges to that vertex." << endl;
@@ -179,16 +182,16 @@ int main() {
     cin >> usrIn;
     //cout << endl;
 
-    if (usrIn == "av") {
+    if (usrIn == "av") { //add vertex
       cout << "Enter name of vertex: " << endl;
       cin >> usrIn;
       g.addVert(usrIn);
       cout << "Vertex added" << endl;
     }
-    else if (usrIn == "rv") {
+    else if (usrIn == "rv") { //remove vertex
       cout << "Remove Vertex" << endl;
     }
-    else if (usrIn == "ae") {
+    else if (usrIn == "ae") { //add edge
       cout << "What vertex does this edge come from?: " << endl;
       cin >> usrIn;
       cout << "What vertex does this go to?: " << endl;
@@ -197,17 +200,17 @@ int main() {
       cin >> w; //type is int
       g.addEdge(usrIn, strTwo, w);
     }
-    else if (usrIn == "re") {
+    else if (usrIn == "re") { //remove edge
       cout << "Remove Edge" << endl;
     }
-    else if (usrIn == "fsp") {
+    else if (usrIn == "fsp") { //find shortest path
       cout << "Find Shortest Path" << endl;
     }
-    else if (usrIn == "q") {
+    else if (usrIn == "q") { //quit
       cout << "Quit" << endl;
       break;
     }
-    else if (usrIn == "p") {
+    else if (usrIn == "p") { //print
       cout << "print" << endl;
       g.print();
     }
