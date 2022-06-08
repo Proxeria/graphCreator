@@ -6,7 +6,13 @@ using namespace std;
 
 class Edge {
 public:
-  
+  Edge(std::string edgeDest, int edgeWeight) {
+    dest = edgeDest;
+    weight = edgeWeight;
+  }
+  void print() {
+    cout << '[' << dest << ", " << weight << ']';  
+  }
 private:
   string dest; //edge's destination
   int weight;
@@ -17,34 +23,96 @@ public:
   Vertex(std::string newLabel) {
     label = newLabel;
   }
+  void print() {
+    for (const auto& e : edgeMap) {
+      //cout << e.first << ": "; //debug
+      e.second->print();
+      //print edges
+      cout << endl;
+    }  
+  }
   string getLabel() {
     return label;
   }
+  Edge* getEdge(string dest) {
+    auto search = edgeMap.find(dest);
+    if (search != edgeMap.end()) {
+      return search->second;
+    }
+    else {
+      return NULL;
+    }
+  }
+  void addEdge(string to, int weight) {
+    if (getEdge(to) != NULL) {
+      cout << "Edge with that destination already exists." << endl;
+      return;
+    }
+    //cout << edgeMap.size() << endl;
+    edgeMap[to] = new Edge(to, weight);
+    //cout << edgeMap.size() << endl;
+  }
 private:
   string label;
-  vector<Edge> edgeVect;
+  map<string, Edge*> edgeMap;
 };
 
 class Graph {
 public:
   void addVert(string);
-  void addEdge(string);
+  void addEdge(string, string, int);
   void remVert();
   void remEdge();
   void findSP();
   void print();
 private:
+  Vertex* getVertex(string);
+  bool vertexExists(string);
   void diAlgo(); //Dijkstra's 
   map<string, Vertex*> vertices;
 };
 
+bool Graph::vertexExists(string label) {
+  auto search = vertices.find(label);
+  if (search != vertices.end()) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+Vertex* Graph::getVertex(string label) {
+  auto search = vertices.find(label);
+  if (search != vertices.end()) {
+    return search->second;
+  }
+  else {
+    return NULL;
+  }
+}
+
 void Graph::addVert(string vertLabel) {
   //Vertex* x = new Vertex(vertLabel);
+  if (vertexExists(vertLabel)) {
+    cout << "Vertex label already exists." << endl;
+    return;
+  }
   vertices[vertLabel] = new Vertex(vertLabel);
 }
 
-void Graph::addEdge(string label) {
-  
+void Graph::addEdge(string from, string to, int weight) {
+  Vertex* sourceVert;
+  if (!vertexExists(from)) {
+    cout << "Edge source doesn't exist." << endl;
+    return;
+  }
+  if (!vertexExists(to)) {
+    cout << "Edge destination doesn't exist." << endl;
+    return;
+  }
+  sourceVert = getVertex(from);
+  sourceVert->addEdge(to, weight);
 }
 
 void Graph::remVert() {
@@ -85,14 +153,16 @@ void Graph::diAlgo() {
 void Graph::print() {
   for (const auto& v : vertices) {
     cout << v.first << ": ";
-    cout << v.second->getLabel();
-    //print edges
+    //cout << v.second->getLabel();
+    v.second->print();
     cout << endl;
   }
 }
 
 int main() {
   string usrIn;
+  int w;
+  string strTwo;
   Graph g;
   
   cout << "Commands (Case Sensitive):" << endl;
@@ -119,7 +189,13 @@ int main() {
       cout << "Remove Vertex" << endl;
     }
     else if (usrIn == "ae") {
-      cout << "Add Edge" << endl;
+      cout << "What vertex does this edge come from?: " << endl;
+      cin >> usrIn;
+      cout << "What vertex does this go to?: " << endl;
+      cin >> strTwo;
+      cout << "What is the weight of this edge?: " << endl;
+      cin >> w; //type is int
+      g.addEdge(usrIn, strTwo, w);
     }
     else if (usrIn == "re") {
       cout << "Remove Edge" << endl;
